@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Leo</title>
+<meta name="description" content="Professional profile for Leo - Content Creator & Developer">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+
+<style>
+:root {
+  --bg: #06050a;
+  --muted: #9aa6bd;
+  --card: rgba(255,255,255,0.05);
+  --border: rgba(255,255,255,0.08);
+  --accent1: #7c4dff;
+  --accent2: #2aa8ff;
+  --radius: 22px;
+  --shadow: 0 30px 90px rgba(0,0,0,.6);
+  --transition: all .3s cubic-bezier(.25,.46,.45,.94);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+  color: #eaf2ff;
+  background: transparent;
+  overflow-x: hidden;
+}
+
+#bgVid {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  filter: brightness(.28) saturate(1.05);
+  transform: scale(1.03);
+}
+
+#splash {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at center, rgba(10,10,20,0.95), rgba(0,0,0,1));
+  z-index: 9999;
+  cursor: pointer;
+  transition: opacity 1s ease;
+}
+#splash.hidden { opacity: 0; pointer-events: none; }
+#splash img {
+  max-width: 420px;
+  border-radius: 18px;
+  transition: var(--transition);
+  filter: drop-shadow(0 0 40px rgba(124,77,255,0.4));
+}
+#splash:hover img { transform: scale(1.05); }
+#splash p {
+  margin-top: 24px;
+  font-size: 18px;
+  color: #b9c4ff;
+  opacity: 0.85;
+  font-weight: 600;
+  letter-spacing: 1px;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; transform: translateY(0); }
+  50% { opacity: 1; transform: translateY(3px); }
+}
+
+.page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px;
+  position: relative;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+.page.visible { opacity: 1; }
+
+.card {
+  width: min(940px, 100%);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) + 6px);
+  overflow: hidden;
+  backdrop-filter: blur(16px) saturate(160%);
+  box-shadow: var(--shadow);
+  animation: fadeIn 1s ease both;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(26px) scale(.98); }
+  to { opacity: 1; transform: none; }
+}
+
+.banner {
+  position: relative;
+  height: 240px;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(124,77,255,.22), rgba(42,168,255,.18));
+}
+.banner img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(.55) contrast(1.1) saturate(1.15);
+}
+.banner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 90% at 50% -10%, rgba(124,77,255,.6), transparent 40%),
+    radial-gradient(120% 90% at 90% 10%, rgba(42,168,255,.5), transparent 45%),
+    linear-gradient(to bottom, rgba(0,0,0,.15), rgba(0,0,0,.55) 70%);
+  pointer-events: none;
+}
+
+.avatarWrap {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+.avatar {
+  width: 148px;
+  height: 148px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 5px solid rgba(255,255,255,.14);
+  box-shadow: 0 14px 60px rgba(0,0,0,.6), 0 0 24px rgba(122,102,255,.3);
+  transform: translateY(-50%);
+  background: #0b0b12;
+  transition: var(--transition);
+}
+.avatar:hover { transform: translateY(-50%) scale(1.03); }
+
+.content {
+  padding: 0 28px 28px;
+  margin-top: -60px;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 6px;
+}
+.name {
+  font-size: 28px;
+  font-weight: 800;
+  background: linear-gradient(90deg, var(--accent1), var(--accent2));
+  -webkit-background-clip: text;
+  color: transparent;
+  text-shadow: 0 0 22px rgba(124,77,255,.25);
+}
+.handle { color: #d6def0; opacity: .9; font-weight: 700; }
+.typewriter { height: 22px; color: #cfe9ff; opacity: .9; font-weight: 600; letter-spacing: .4px; }
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.1);
+  font-weight: 700;
+  font-size: 13.5px;
+}
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  box-shadow: 0 0 12px currentColor;
+}
+
+.desc {
+  margin: 18px auto 6px;
+  max-width: 720px;
+  color: var(--muted);
+  font-size: 15.5px;
+  line-height: 1.65;
+}
+
+.badges {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.badges a img {
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+  transition: var(--transition);
+}
+.badges a:hover img { transform: translateY(-2px) scale(1.1); }
+
+.links {
+  margin: 22px auto 0;
+  max-width: 820px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+}
+.link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: #eef4ff;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 14px;
+  padding: 13px 16px;
+  transition: var(--transition);
+}
+.link:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0,0,0,.35), 0 0 24px rgba(122,102,255,.18);
+  border-color: rgba(124,77,255,.35);
+}
+
+.icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, rgba(124,77,255,.65), rgba(42,168,255,.35));
+}
+.icon img { width: 22px; height: 22px; filter: invert(1); }
+
+.footer {
+  margin: 18px auto 0;
+  max-width: 820px;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  color: #b6c3da;
+  font-size: 13px;
+  border-top: 1px solid rgba(255,255,255,.07);
+  padding-top: 14px;
+}
+
+.audio {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(0,0,0,.28);
+  border: 1px solid rgba(255,255,255,.08);
+  padding: 6px 10px;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+}
+.audio button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 8px;
+  transition: var(--transition);
+}
+.audio button:hover { background: rgba(255,255,255,.12); }
+.audio img { width: 18px; height: 18px; filter: invert(1); opacity: .9; }
+.audio input { width: 120px; accent-color: #9ecfff; }
+
+@media(max-width:720px) {
+  .banner { height: 200px; }
+  .avatar { width: 128px; height: 128px; }
+  .name { font-size: 24px; }
+  .footer { flex-direction: column; align-items: flex-start; }
+}
+</style>
+</head>
+
+<body>
+<video id="bgVid" playsinline muted autoplay loop src="https://cdn.pixabay.com/video/2023/07/05/170133-842720326_large.mp4"></video>
+
+<div id="splash">
+  <img src="https://i.pinimg.com/736x/49/1d/ce/491dceb2192320fba57fd855799e58cd.jpg" alt="Logo">
+  <p>Click to Continue</p>
+</div>
+
+<div class="page">
+  <div class="card" id="card">
+    <div class="banner">
+      <img src="https://i.pinimg.com/1200x/16/f4/f1/16f4f11c08285419421b155daca2b538.jpg" alt="Banner">
+      <canvas class="particles" id="particles"></canvas>
+    </div>
+
+    <div class="avatarWrap">
+      <img id="avatarLg" class="avatar" alt="avatar" src="https://1128luv.xyz/">
+    </div>
+
+    <div class="content">
+      <div class="header">
+        <div class="name" id="fullName">Your Name</div>
+        <div class="handle" id="handle">@yourhandle</div>
+        <div class="typewriter" id="typeWriter"></div>
+        <div class="status">
+          <div class="status-dot" id="statusDot"></div>
+          <div id="statusLabel">Online</div>
+        </div>
+      </div>
+
+      <p class="desc" id="desc">I drop edits, clips, and chaos. Links below.</p>
+      <div class="badges" id="smallBadges"></div>
+      <div class="links" id="linksRow"></div>
+
+      <div class="footer">
+        <div id="joinedText">Joined 2021</div>
+        <div id="viewsText">
+          <img src="https://cdn-icons-png.flaticon.com/512/159/159604.png" width="16" /> 0
+        </div>
+        <div class="audio">
+          <button id="playBtn" title="Play"><img src="https://cdn-icons-png.flaticon.com/512/727/727245.png"></button>
+          <button id="pauseBtn" title="Pause"><img src="https://cdn-icons-png.flaticon.com/512/727/727239.png"></button>
+          <input id="volumeSlider" type="range" min="0" max="1" step="0.01" value="0.5" />
+        </div>
+      </div>
+    </div>
+    <audio id="bgAudio" loop></audio>
+  </div>
+</div>
+
+<script>
+const CONFIG = {
+  discordId: "1306838878249947136",
+  name: "Leo Delubyo",
+  handle: "LeoDelubyo",
+  bio: "love you",
+  avatar: "https://i.pinimg.com/736x/d9/90/68/d99068511bdccd3a2d4c9a047310a6b1.jpg",
+  badges: [
+    { img: "https://cdn-icons-png.flaticon.com/128/4945/4945914.png", href: "https://discord.gg/76k4bnCVCU" },
+    { img: "https://cdn-icons-png.flaticon.com/128/17701/17701286.png", href: "https://discord.com/users/1306838878249947136" }
+  ],
+  backgroundAudio: "https://1128luv.xyz/bio/mathie/pic/kanton.MP3",
+  links: [
+    { title: "Discord Server", sub: "DELUBYO", href: "https://discord.gg/76k4bnCVCU", icon: "https://cdn-icons-png.flaticon.com/128/5968/5968756.png" },
+    { title: "YouTube", sub: "Subscribe", href: "https://www.youtube.com/@Leolang69", icon: "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/youtube.svg" }
+  ]
+};
+
+const $ = s => document.querySelector(s);
+const el = (t, c) => { const e = document.createElement(t); if (c) e.className = c; return e; };
+
+$('#splash').addEventListener('click', () => {
+  $('#splash').classList.add('hidden');
+  $('.page').classList.add('visible');
+  const audio = $('#bgAudio');
+  audio.muted = false;
+  audio.play().catch(() => {});
+});
+
+function getCreatedAt(id) {
+  const base = 1420070400000n;
+  const snow = BigInt(id);
+  return new Date(Number((snow >> 22n) + base));
+}
+
+async function fetchStatus() {
+  try {
+    const r = await fetch(`https://api.lanyard.rest/v1/users/${CONFIG.discordId}`);
+    if (!r.ok) return null;
+    return (await r.json()).data.discord_status;
+  } catch (e) { return null; }
+}
+
+function boot() {
+  const audio = $('#bgAudio');
+  audio.src = CONFIG.backgroundAudio;
+  audio.loop = true;
+  audio.volume = 0.5;
+  audio.muted = true;
+
+  $('#playBtn').onclick = () => { audio.muted = false; audio.play(); };
+  $('#pauseBtn').onclick = () => audio.pause();
+  $('#volumeSlider').oninput = e => audio.volume = e.target.value;
+
+  $('#avatarLg').src = CONFIG.avatar;
+  $('#fullName').textContent = CONFIG.name;
+  $('#handle').textContent = CONFIG.handle;
+  $('#desc').textContent = CONFIG.bio;
+  $('#smallBadges').innerHTML = CONFIG.badges.map(b => `<a href="${b.href}" target="_blank"><img src="${b.img}"></a>`).join('');
+  buildLinks();
+
+  const created = getCreatedAt(CONFIG.discordId);
+  $('#joinedText').textContent = "Joined " + created.getFullYear();
+
+  updateViews();
+  setInterval(updateViews, 1500);
+  startTypewriter();
+  updateStatus();
+  initParticles();
+}
+
+function buildLinks() {
+  const row = $('#linksRow');
+  row.innerHTML = '';
+  CONFIG.links.forEach(it => {
+    const a = el('a', 'link');
+    a.href = it.href;
+    a.target = '_blank';
+    const icon = el('div', 'icon');
+    const img = document.createElement('img');
+    img.src = it.icon;
+    icon.appendChild(img);
+    const txt = el('div', 'linkText');
+    const lab = el('div', 'label');
+    lab.textContent = it.title;
+    const sub = el('div', 'sub');
+    sub.textContent = it.sub;
+    txt.append(lab, sub);
+    a.append(icon, txt);
+    row.append(a);
+  });
+}
+
+function updateViews() {
+  fetch('/bio/leo/views.php').then(r => r.text()).then(v => {
+    const n = Number(v.trim()) || 0;
+    $('#viewsText').innerHTML = `<img src="https://cdn-icons-png.flaticon.com/512/159/159604.png" width="16" /> ${n.toLocaleString()} views`;
+  });
+}
+fetch('/bio/leo/views.php?increment=1');
+
+function startTypewriter() {
+  const t = $('#typeWriter');
+  const arr = ['Delubyo', 'On Top', 'Nigga'];
+  let i = 0, j = 0;
+  setInterval(() => {
+    const s = arr[i];
+    t.textContent = s.slice(0, j);
+    j++;
+    if (j > s.length + 8) { j = 0; i = (i + 1) % arr.length; }
+  }, 75);
+}
+
+async function updateStatus() {
+  const s = await fetchStatus();
+  if (!s) return;
+  const c = { online: "#29ffd1", idle: "#ffb200", dnd: "#ff4d4d", offline: "#6b7280" };
+  $('#statusLabel').textContent = s.charAt(0).toUpperCase() + s.slice(1);
+  $('#statusDot').style.color = c[s] || "#6b7280";
+}
+
+function initParticles() {
+  const c = $('#particles');
+  const ctx = c.getContext('2d');
+  const resize = () => { c.width = c.offsetWidth; c.height = c.offsetHeight; };
+  resize();
+  window.addEventListener('resize', resize);
+
+  const p = Array.from({ length: 60 }, () => ({
+    x: Math.random() * c.width,
+    y: Math.random() * c.height,
+    r: Math.random() * 1.6 + .5,
+    vx: (Math.random() - .5) * .45,
+    vy: (Math.random() - .5) * .45
+  }));
+
+  (function draw() {
+    ctx.clearRect(0, 0, c.width, c.height);
+    ctx.globalCompositeOperation = 'lighter';
+    for (const d of p) {
+      d.x += d.vx; d.y += d.vy;
+      if (d.x < 0) d.x = c.width;
+      if (d.x > c.width) d.x = 0;
+      if (d.y < 0) d.y = c.height;
+      if (d.y > c.height) d.y = 0;
+      const a = .06 + d.r * .02;
+      const g = ctx.createRadialGradient(d.x, d.y, 0, d.x, d.y, d.r * 4);
+      g.addColorStop(0, `rgba(124,77,255,${a})`);
+      g.addColorStop(1, `rgba(42,168,255,${a * .7})`);
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    requestAnimationFrame(draw);
+  })();
+}
+
+window.addEventListener('load', boot);
+</script>
+</body>
+</html>
